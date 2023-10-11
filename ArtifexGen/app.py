@@ -5,8 +5,8 @@ from io import BytesIO
 
 from flask import Flask, render_template, request, jsonify
 
-# from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
-# import torch
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+import torch
 from PIL import Image
 from io import BytesIO
 
