@@ -1,14 +1,14 @@
 import os
 import base64
 import requests
+from PIL import Image
 from io import BytesIO
 
 from flask import Flask, render_template, request, jsonify
 
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 import torch
-from PIL import Image
-from io import BytesIO
+
 
 
 app = Flask(__name__, template_folder='templates')
