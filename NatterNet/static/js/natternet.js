@@ -51,7 +51,7 @@ function goSendQuestion(question){
         $.getJSON('/api', {
             user_input: question
         }, function(data) {
-            goRenderizeWidgetChatMessage('bot', data.response);
+            goRenderizeWidgetChatMessage('bot', data);
             resetLoading();
         });
         return false;
