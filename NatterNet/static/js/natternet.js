@@ -40,7 +40,7 @@ function startLoading(){
 }
 
 function stopLoading(){
-    $("#input-pergunta").val('').prop('readonly', false);
+    $("#input-question").val('').prop('readonly', false);
     $("#btn-send-question").prop('disabled', false);
 }
 
@@ -52,7 +52,7 @@ function goSendQuestion(question){
             user_input: question
         }, function(data) {
             goRenderizeWidgetChatMessage('bot', data);
-            resetLoading();
+            stopLoading();
         });
         return false;
     }
