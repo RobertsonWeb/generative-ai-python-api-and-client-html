@@ -3,13 +3,9 @@ import base64
 import requests
 from PIL import Image
 from io import BytesIO
-
 from flask import Flask, render_template, request, jsonify
-
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 import torch
-
-
 
 app = Flask(__name__, template_folder='templates')
 
@@ -31,12 +27,11 @@ def web_client():
 @app.route('/api')
 def api():
     try:
-        """ 
-            Get data from HTTP request from form 
-        """
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
         prompt = request.args.get('prompt')
         negative_prompt = request.args.get('negative_prompt')
-        pretrained_model_or_path =  "stabilityai/stable-diffusion-2-1-base"
+        pretrained_model_or_path = "stabilityai/stable-diffusion-2-1-base"
         num_images_per_prompt = int(request.args.get('number_images'))
         num_inference_steps = int(request.args.get('inference_steps'))
         height = int(request.args.get('height'))
@@ -45,16 +40,15 @@ def api():
         guidance_scale = 8
         
         scheduler = EulerDiscreteScheduler.from_pretrained(pretrained_model_or_path, subfolder="scheduler")
-        pipeline = StableDiffusionPipeline.from_pretrained(pretrained_model_or_path, scheduler=scheduler, 
-                                                           torch_dtype=torch.float16).to("cuda")
+        pipeline = StableDiffusionPipeline.from_pretrained(pretrained_model_or_path, scheduler=scheduler).to(device)
         
-        generator = torch.Generator(device="cuda").manual_seed(seed)
+        generator = torch.Generator(device=device).manual_seed(seed)
         image = pipeline(prompt=prompt, num_images_per_prompt=num_images_per_prompt,
-                           negative_prompt = negative_prompt,
+                           negative_prompt=negative_prompt,
                            num_inference_steps=num_inference_steps,
-                           height = height, width = width,
-                           guidance_scale = guidance_scale,
-                           generator = generator)
+                           height=height, width=width,
+                           guidance_scale=guidance_scale,
+                           generator=generator)
         
         response = {'images': []}
     
@@ -63,5 +57,5 @@ def api():
             response['images'].append(img_str)
 
     except Exception as e:
-        response = f"Oh no, I'm sorry! Error:{e}"
+        response = f"Oh no, I'm sorry! Error: {e}"
     return jsonify(response)
