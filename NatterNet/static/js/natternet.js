@@ -6,7 +6,12 @@ function autoScroolChatContainer(){
 
 function goRenderizeWidgetChatMessage(originUser, message) {
     let currentDate = new Date(); 
-    let time = currentDate.getHours()+':'+currentDate.getMinutes();
+    let hours = currentDate.getHours();
+    let minutes = currentDate.getMinutes().toString();
+    if (minutes.length === 1) {
+        minutes = '0' + minutes;
+    }
+    let time = hours + ':' + minutes;
 
     if (originUser == 'bot') {
         var icon = 'robot';
@@ -27,7 +32,6 @@ function goRenderizeWidgetChatMessage(originUser, message) {
                                 <p class="text-muted"><small>${time}</small></p>
                             </div>  
                         </div>`;
-                       
 
     $('#chat-container').append(messageWidget);
 
