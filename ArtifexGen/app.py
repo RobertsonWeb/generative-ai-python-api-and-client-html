@@ -15,7 +15,7 @@ def img_to_base64(img):
     """
     buffered = BytesIO()
     img.save(buffered, format="JPEG")
-    return f'data:image/jpeg;base64,{base64.b64encode(buffered.getvalue())}'
+    return f"data:image/jpeg;base64,{base64.b64encode(buffered.getvalue()).decode('utf-8')}"
 
 @app.route("/")
 def web_client():
