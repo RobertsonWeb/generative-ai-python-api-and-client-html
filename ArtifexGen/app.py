@@ -31,13 +31,16 @@ def api():
 
         prompt = request.args.get('prompt')
         negative_prompt = request.args.get('negative_prompt')
-        pretrained_model_or_path = "stabilityai/stable-diffusion-2-1-base"
+        pretrained_model_or_path = "sd2-community/stable-diffusion-2-1"
         num_images_per_prompt = int(request.args.get('number_images'))
         num_inference_steps = int(request.args.get('inference_steps'))
         height = int(request.args.get('height'))
         width = int(request.args.get('width'))
         seed = int(request.args.get('seed'))
         guidance_scale = 8
+
+        # torch_dtype add for light use VRAM and better performance
+        dtype = torch.float16 if device == "cuda" else torch.float32
         
         scheduler = EulerDiscreteScheduler.from_pretrained(pretrained_model_or_path, subfolder="scheduler")
         pipeline = StableDiffusionPipeline.from_pretrained(pretrained_model_or_path, scheduler=scheduler).to(device)
